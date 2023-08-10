@@ -67,7 +67,6 @@ public class Client {
         account.setClient(this);
         this.accounts.add(account);
     }
-
     public String toString() {
         return firstName + " " + lastName;
     }
