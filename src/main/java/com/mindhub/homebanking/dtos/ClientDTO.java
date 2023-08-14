@@ -10,6 +10,7 @@ public class ClientDTO {
     private Long id;
     private String firstName, lastName, email;
     private Set<AccountDTO> accounts;
+    private Set<ClientLoanDTO> clientloans;
 
     public ClientDTO(Client client) {
         id = client.getId();
@@ -38,4 +39,6 @@ public class ClientDTO {
     public Set<AccountDTO> getAccounts() {
         return accounts;
     }
+
+    public Set<ClientLoanDTO> getClientloans() {return clientloans;}
 }

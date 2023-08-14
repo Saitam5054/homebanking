@@ -3,16 +3,13 @@ package com.mindhub.homebanking.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Client {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-
     private Long id;
     private String firstName;
     private String lastName;
@@ -20,6 +17,12 @@ public class Client {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Account> accounts = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "clients")
+    private Set<Loan> loans = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
+    private Set<ClientLoan> clientloans = new HashSet<>();
 
     public Client() {
 
@@ -47,7 +50,7 @@ public class Client {
         return lastName;
     }
 
-    public void setLastName() {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -55,7 +58,7 @@ public class Client {
         return email;
     }
 
-    public void setEmail() {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -67,6 +70,20 @@ public class Client {
         account.setClient(this);
         this.accounts.add(account);
     }
+
+    public Set<Loan> getLoans() {
+        return loans;
+    }
+
+    public void addLoan(Loan loan) {
+        loan.setClients(this);
+        this.loans.add(loan);
+    }
+
+    public Set<ClientLoan> getClientLoans() {
+        return clientloans;
+    }
+
     public String toString() {
         return firstName + " " + lastName;
     }
