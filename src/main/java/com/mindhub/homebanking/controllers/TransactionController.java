@@ -21,11 +21,13 @@ public class TransactionController {
     @RequestMapping("/transactions")
     public List<TransactionDTO> getTransactions() {
 
-        List<Transaction> listTransaction = transactionRepository.findAll();
+        /*List<Transaction> listTransaction = transactionRepository.findAll();
 
         List<TransactionDTO> listTransactionDTO = listTransaction.stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
 
-        return listTransactionDTO;
+        return listTransactionDTO;*/
+
+        return transactionRepository.findAll().stream().map(TransactionDTO::new).collect(Collectors.toList());
     };
 
     @RequestMapping("transactions/{id}")

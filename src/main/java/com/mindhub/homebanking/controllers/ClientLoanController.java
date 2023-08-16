@@ -20,9 +20,11 @@ public class ClientLoanController {
 
     @RequestMapping("/clientLoans")
     public List<ClientLoanDTO> getClientLoan() {
-        List<ClientLoan> listClientLoan = clientloanRepository.findAll();
-        List<ClientLoanDTO> listClientLoanDTO = listClientLoan.stream().map(clientloan -> new ClientLoanDTO(clientloan)).collect(Collectors.toList());
-        return listClientLoanDTO;
+        /*List<ClientLoan> listClientLoan = clientloanRepository.findAll();
+        List<ClientLoanDTO> listClientLoanDTO = listClientLoan.stream().map(clientLoan -> new ClientLoanDTO(clientLoan)).collect(Collectors.toList());
+        return listClientLoanDTO;*/
+
+        return clientloanRepository.findAll().stream().map(ClientLoanDTO::new).collect(Collectors.toList());
     }
 
     @RequestMapping("/clientLoans/{id}")

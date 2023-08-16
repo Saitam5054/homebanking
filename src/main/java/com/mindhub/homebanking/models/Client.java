@@ -1,9 +1,11 @@
 package com.mindhub.homebanking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client {
@@ -18,11 +20,14 @@ public class Client {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "clients")
-    private Set<Loan> loans = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
+    private Set<ClientLoan> loans = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
-    private Set<ClientLoan> clientloans = new HashSet<>();
+    private Set<ClientLoan> clientLoans = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
+    private Set<Card> cards = new HashSet<>();
 
     public Client() {
 
@@ -71,17 +76,42 @@ public class Client {
         this.accounts.add(account);
     }
 
-    public Set<Loan> getLoans() {
+    /*public Set<Loan> getLoans() {
         return loans;
+    }*/
+
+    @JsonIgnore
+    public List<Loan> getLoans (){
+        return loans.stream().map(clientLoan -> clientLoan.getLoan()).collect(Collectors.toList());
     }
 
-    public void addLoan(Loan loan) {
+    public void setLoans(Set<ClientLoan> loans) {
+        this.loans = loans;
+    }
+
+    public void addLoan(ClientLoan loan) {
         loan.setClients(this);
         this.loans.add(loan);
     }
 
     public Set<ClientLoan> getClientLoans() {
-        return clientloans;
+        return clientLoans;
+    }
+    /*public Set<ClientLoan> getClientLoans() {
+        return loans;
+    }*/
+    public void addClientLoan(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
+        clientLoans.add(clientLoan);
+    }
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void addCard(Card card) {
+        card.setClient(this);
+        this.cards.add(card);
     }
 
     public String toString() {

@@ -8,12 +8,14 @@ public class ClientLoanDTO {
     private String name;
     private Double amount;
     private int payments;
+    private Long loanId;
 
-    public ClientLoanDTO(ClientLoan clientloan) {
-        id = clientloan.getId();
-        name = clientloan.getLoan().getName();
-        amount = clientloan.getAmount();
-        payments = clientloan.getPayments();
+    public ClientLoanDTO(ClientLoan clientLoan) {
+        id = clientLoan.getId();
+        name = clientLoan.getLoan().getName();
+        amount = clientLoan.getAmount();
+        payments = clientLoan.getPayments();
+        loanId = clientLoan.getLoan().getId();
     }
 
     public Long getId() {
@@ -30,5 +32,9 @@ public class ClientLoanDTO {
 
     public int getPayments() {
         return payments;
+    }
+
+    public Long getLoanId() {
+        return loanId;
     }
 }
