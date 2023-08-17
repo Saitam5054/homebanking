@@ -2,10 +2,12 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
@@ -18,12 +20,20 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Bean
-	public CommandLineRunner init(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository) {
+	public CommandLineRunner init(ClientRepository clientRepository,
+								  AccountRepository accountRepository,
+								  TransactionRepository transactionRepository,
+								  LoanRepository loanRepository,
+								  ClientLoanRepository clientLoanRepository,
+								  CardRepository cardRepository) {
 		return args -> {
 
-			Client client1 = new Client("Melba","Morel","melba@mindhub.com");
-			Client client2 = new Client("Philip", "Fry", "Fry@yahoo.com");
+			Client client1 = new Client("Melba","Morel","melba@mindhub.com", passwordEncoder.encode("melba"));
+			Client client2 = new Client("Philip", "Fry", "Fry@yahoo.com", passwordEncoder.encode("1077"));
 
 			clientRepository.save(client1);
 			clientRepository.save(client2);
@@ -78,6 +88,27 @@ public class HomebankingApplication {
 
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
+
+			Card card1 = new Card("Melba Morel", "4923-5678-9012-3456", 125, CardType.DEBIT, CardColor.GOLD, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card2 = new Card("Melba Morel", "5469-8743-2109-6587", 321, CardType.CREDIT, CardColor.TITANIUM, LocalDate.now(), LocalDate.now().plusYears(5));
+
+			Card card3 = new Card("Philip Fry", "4532-9876-1234-5678", 358, CardType.CREDIT, CardColor.SILVER, LocalDate.now(), LocalDate.now().plusYears(5));
+
+			client1.addCard(card1);
+			client1.addCard(card2);
+
+			cardRepository.save(card1);
+			cardRepository.save(card2);
+
+			client2.addCard(card3);
+
+			cardRepository.save(card3);
+
+			Client admin = new Client("admin", "admin", "admin", passwordEncoder.encode("admin"));
+
+			clientRepository.save(admin);
+
+
 		};
 	}
 }
