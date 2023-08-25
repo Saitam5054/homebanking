@@ -104,7 +104,7 @@ public class HomebankingApplication {
 
 			cardRepository.save(card3);
 
-			Client admin = new Client("admin", "admin", "admin", passwordEncoder.encode("admin"));
+			Client admin = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin"));
 
 			clientRepository.save(admin);
 
