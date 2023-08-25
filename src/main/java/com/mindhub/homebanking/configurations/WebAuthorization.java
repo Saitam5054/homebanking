@@ -34,7 +34,6 @@ public class WebAuthorization {
 
         http.csrf().disable();
 
-        // httpSecurity.headers().frameOptions().disable();
         http.headers().frameOptions().sameOrigin();
 
         http.exceptionHandling().authenticationEntryPoint((req,res,exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
