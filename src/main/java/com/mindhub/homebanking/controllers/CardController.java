@@ -36,8 +36,21 @@ public class CardController {
 
         List<Card> cards = cardRepository.findByCardHolder(client);
 
-        if (cards.size() >= 3) {
+        long typeCount = cards.stream().filter(card -> card.getType() == type).count();
+        long typeAndColorCount = cards.stream().filter(card -> card.getType() == type && card.getColor() == color).count();
+
+        /*if (cards.size() >= 3) {
             return new ResponseEntity<>("You already have the maximum cards", HttpStatus.FORBIDDEN);
+        }*/
+
+        if (typeCount >= 3 || typeAndColorCount > 0) {
+            return new ResponseEntity<>("You've reached the limit cards", HttpStatus.FORBIDDEN);
+        }
+
+        boolean cardNumber = cardRepository.findByNumber(generateCardNumber());
+
+        if (cardNumber) {
+            return new ResponseEntity<>("Card number already exists", HttpStatus.FORBIDDEN);
         }
 
         Card card = new Card();

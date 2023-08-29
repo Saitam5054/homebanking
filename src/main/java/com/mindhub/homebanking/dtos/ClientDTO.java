@@ -17,6 +17,8 @@ public class ClientDTO {
     // private  Set<ClientLoanDTO> clientLoans;
     // private Set<LoanDTO> loans;
 
+    // public ClientDTO() {}
+
     public ClientDTO(Client client) {
         id = client.getId();
         firstName = client.getFirstName();

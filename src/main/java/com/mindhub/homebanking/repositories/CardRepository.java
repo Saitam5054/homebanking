@@ -10,4 +10,6 @@ import java.util.List;
 @RepositoryRestResource
 public interface CardRepository extends JpaRepository<Card, Long> {
     List<Card> findByCardHolder(Client client);
+
+    boolean findByNumber(String s);
 }
