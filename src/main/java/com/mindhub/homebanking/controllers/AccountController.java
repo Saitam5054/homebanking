@@ -6,9 +6,11 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -23,49 +25,35 @@ public class AccountController {
 
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private AccountService accountService;
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts() {
 
         /*List<Account> listAccount = accountRepository.findAll();
-
         List<AccountDTO> listAccountDTO = listAccount.stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
-
         return listAccountDTO;*/
-
         // return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
 
-        return accountRepository.findAll().stream().map(AccountDTO::new).collect(Collectors.toList());
+        // return accountRepository.findAll().stream().map(AccountDTO::new).collect(Collectors.toList());
+
+        return accountService.getAccountsDTO();
     };
 
     @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id) {
-        return new AccountDTO((accountRepository.findById(id).orElse(null)));
+        //return new AccountDTO((accountRepository.findById(id).orElse(null)));
+
+        return accountService.getAccountDTOById(id);
     }
 
-    /*@RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
-    public ResponseEntity<Object> createAccount (@PathVariable Long id) {
-        Client account = clientRepository.findById(id).orElse(null);
-        if (account != null) {
-            clientRepository.save(account);
-            return new ResponseEntity<>(new ClientDTO(account), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>("Not found", HttpStatus.FORBIDDEN);
-        }
-            @RequestParam Client client, @RequestParam String number, @RequestParam Double balance) {
-
-        if (client.isEmpty() || number.isEmpty() || balance.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
-        }
-
-    }*/
-
     @PostMapping("/clients/current/accounts")
-    public ResponseEntity<Object> createAccount(@AuthenticationPrincipal UserDetails userDetails) {
-        Client client = clientRepository.findByEmail(userDetails.getUsername());
+    public ResponseEntity<Object> createAccount(Authentication authentication) {
+        Client client = clientRepository.findByEmail(authentication.getName());
 
         if (client == null) {
             return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
@@ -76,16 +64,27 @@ public class AccountController {
         }
 
         Account account = new Account();
-
         account.setNumber(generateAccountNumber());
         account.setBalance(0D);
         account.setClient(client);
-        accountRepository.save(account);
+
+        // accountRepository.save(account);
+        accountService.saveAccount(account);
 
         return new ResponseEntity<>("Account created", HttpStatus.CREATED);
-
     }
 
+    @GetMapping("/clients/current/accounts")
+    public ResponseEntity<Object> getClientAccounts(Authentication authentication) {
+        String email = authentication.getName();
+        Client client = clientRepository.findByEmail(email);
+
+        List<AccountDTO> accountDTOs = client.getAccounts().stream()
+                .map(AccountDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(accountDTOs);
+    }
     private String generateAccountNumber() {
         Random random = new Random();
         int accountNumber = random.nextInt(99999999) +1;
