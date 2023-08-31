@@ -31,11 +31,8 @@ public class AccountController {
     public List<AccountDTO> getAccounts() {
 
         /*List<Account> listAccount = accountRepository.findAll();
-
         List<AccountDTO> listAccountDTO = listAccount.stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
-
         return listAccountDTO;*/
-
         // return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
 
         return accountRepository.findAll().stream().map(AccountDTO::new).collect(Collectors.toList());
@@ -76,14 +73,13 @@ public class AccountController {
         }
 
         Account account = new Account();
-
         account.setNumber(generateAccountNumber());
         account.setBalance(0D);
         account.setClient(client);
+
         accountRepository.save(account);
 
         return new ResponseEntity<>("Account created", HttpStatus.CREATED);
-
     }
 
     private String generateAccountNumber() {

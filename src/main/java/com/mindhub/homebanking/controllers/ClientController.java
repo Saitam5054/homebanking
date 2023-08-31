@@ -83,11 +83,6 @@ public class ClientController {
     }
 
     /*@RequestMapping("/api/clients/current")
-    public ClientDTO getCurrent(Authentication authentication) {
-        return new ClientDTO(clientRepository.findByEmail(authentication.name()));
-    }*/
-
-    /*@RequestMapping("/api/clients/current")
     public ClientDTO getClient(Authentication authentication) {
         return new ClientDTO(clientRepository.findByEmail(authentication.getEmail().orElse(null));
     }*/
