@@ -30,7 +30,6 @@ public class Loan {
     private Set<ClientLoan> clients = new HashSet<>();
 
     public Loan() {
-
     }
 
     public Loan(String name, Double maxAmount, List<Integer> payments) {
@@ -82,6 +81,10 @@ public class Loan {
     public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setLoan(this);
         clientLoans.add(clientLoan);
+    }
+
+    public Collection<Object> getAvailableInstallments() {
+        return null;
     }
     
 /*    public void setClients(Set<ClientLoan> clients) {
