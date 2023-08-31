@@ -52,7 +52,7 @@ public class ClientController {
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
     public ResponseEntity<Object> register (
-        @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password) {
+            @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password) {
 
         if(firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -62,17 +62,13 @@ public class ClientController {
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
 
-<<<<<<<<< Temporary merge branch 1
-        // Client client = new Client(firstName,lastName,email, passwordEncoder.encode(password));
-        // clientRepository.save(client);
-
-        clientRepository.save(new Client(firstName,lastName,email,passwordEncoder.encode(password)));
-        return new ResponseEntity<>("Register", HttpStatus.CREATED);
-=========
-        Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
+        Client client = new Client(firstName,lastName, email, passwordEncoder.encode(password));
         clientRepository.save(client);
 
         // clientRepository.save(new Client(firstName,lastName,email,passwordEncoder.encode(password)));
+        // return new ResponseEntity<>("Register", HttpStatus.CREATED);
+
+        // clientRepository.save(client);
 
         Account account = new Account("First Account", LocalDate.now(), 0D);
         account.setClient(client);
@@ -80,7 +76,6 @@ public class ClientController {
 
         return new ResponseEntity<>("Register", HttpStatus.CREATED);
 
->>>>>>>>> Temporary merge branch 2
     }
     @RequestMapping("clients/current")
     public ClientDTO getCurrent(Authentication authentication) {
