@@ -25,15 +25,17 @@ public class ClientLoan {
     // @JoinColumn(name = "loan_id")
     private Loan loan;
 
-public ClientLoan() {
-
-}
+    public ClientLoan() {
+    }
 
     public ClientLoan(Double amount, int payments, Client client, Loan loan) {
         this.amount = amount;
         this.payments = payments;
         this.client = client;
         this.loan = loan;
+    }
+
+    public ClientLoan(Double amount, List<Integer> payments, Client client, Loan loan) {
     }
 
     public Long getId() {

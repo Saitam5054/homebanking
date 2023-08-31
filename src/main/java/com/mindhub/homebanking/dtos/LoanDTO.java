@@ -13,18 +13,20 @@ public class LoanDTO {
     private String name;
     private Double maxAmount;
     private List<Integer> payments;
-    private Client clients;
-    private Set<ClientLoan> clientLoans;
+    // private Client clients;
+    // private Set<ClientLoan> clientLoans;
 
     // private Set<Loan> loans;
+
+    public LoanDTO() { }
 
     public LoanDTO(Loan loan) {
         id = loan.getId();
         name = loan.getName();
         maxAmount = loan.getMaxAmount();
         payments = loan.getPayments();
-        clients = (Client) loan.getClients();
-        clientLoans = loan.getClientLoans();
+        // clients = (Client) loan.getClients();
+        // clientLoans = loan.getClientLoans();
     }
 
     public Long getId() {
@@ -43,15 +45,15 @@ public class LoanDTO {
         return payments;
     }
 
-    public Client getClients() {
+    /*public Client getClients() {
         return clients;
-    }
+    }*/
 
     /*public Set<Loan> getLoans() {
         return loans;
     }*/
 
-    public Set<ClientLoan> getClientLoans() {
+    /*public Set<ClientLoan> getClientLoans() {
         return clientLoans;
-    }
+    }*/
 }

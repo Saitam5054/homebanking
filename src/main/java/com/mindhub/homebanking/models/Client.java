@@ -31,7 +31,6 @@ public class Client {
     private Set<Card> cards = new HashSet<>();
 
     public Client() {
-
     }
 
     public Client(String first, String last, String email, String password) {

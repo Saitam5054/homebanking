@@ -15,6 +15,8 @@ public class TransactionDTO {
     private String description;
     private LocalDate date;
 
+    public TransactionDTO() { }
+
     public TransactionDTO(Transaction transaction) {
         id = transaction.getId();
         type = transaction.getType();
